@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Agent Demo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <script src="/static/js/app.js" type="module"></script>
+    <style>
+      body {
+        font-family: 'Roboto', sans-serif;
+        margin: 0;
+        padding: 20px;
+        background-color: #f0f2f5;
+        color: #333;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-height: 100vh;
+      }
+
+      h1 {
+        text-align: center;
+        color: #1a73e8;
+        margin-bottom: 20px;
+      }
+
+      .container {
+          width: 100%;
+          max-width: 700px;
+          background-color: #fff;
+          padding: 20px;
+          border-radius: 8px;
+          box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+          box-sizing: border-box;
+      }
+
+      #connectionStatus {
+          text-align: center;
+          margin-bottom: 15px;
+          font-size: 0.9em;
+          color: #555;
+      }
+
+      #connectionStatus.connected {
+          color: #28a745;
+          font-weight: bold;
+      }
+
+      #connectionStatus.disconnected {
+          color: #dc3545;
+          font-weight: bold;
+      }
+
+       #connectionStatus.connecting {
+          color: #ffc107;
+          font-style: italic;
+      }
+
+
+      #messages {
+        height: 300px;
+        overflow-y: auto;
+        border: 1px solid #dcdcdc;
+        padding: 10px;
+        background-color: #fefefe;
+        border-radius: 5px;
+        margin-bottom: 15px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      #messages p {
+        margin: 0;
+        padding: 10px 15px;
+        border-radius: 15px;
+        max-width: 85%;
+        word-wrap: break-word;
+        line-height: 1.4;
+        position: relative;
+      }
+
+      #messages p.agent-message {
+        background-color: #e9ebee;
+        color: #333;
+        align-self: flex-start;
+        border-bottom-left-radius: 5px;
+        /* ### NEW ###: Added for better fitting of content */
+        width: fit-content;
+      }
+
+      #messages p.user-message {
+        background-color: #1a73e8;
+        color: white;
+        align-self: flex-end;
+        border-bottom-right-radius: 5px;
+      }
+
+      /* ### NEW CODE ###: Style for the generated images */
+      #messages img.agent-image {
+        max-width: 300px; /* Control max image size */
+        border-radius: 10px;
+        display: block;
+      }
+      
+      /* --- THIS IS THE NEWLY ADDED STYLE FOR TRANSCRIPTIONS --- */
+      .transcription {
+          color: #888;
+          font-style: italic;
+      }
+
+      #messageForm {
+        display: flex;
+        gap: 10px;
+        margin-top: 15px;
+        padding-top: 10px;
+        border-top: 1px solid #dcdcdc;
+        align-items: center;
+      }
+
+      #messageForm label {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+      }
+
+      #messageForm input[type="text"] {
+        flex-grow: 1;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 20px;
+        font-size: 1rem;
+        padding-left: 15px;
+      }
+
+      #messageForm button {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 20px;
+        cursor: pointer;
+        font-size: 1rem;
+        transition: background-color 0.3s ease, opacity 0.3s ease;
+        font-weight: bold;
+      }
+
+      #sendButton {
+        background-color: #1a73e8;
+        color: white;
+      }
+
+      #sendButton:disabled {
+        background-color: #b0c4de;
+        opacity: 0.7;
+        cursor: not-allowed;
+      }
+
+      #sendButton:hover:not(:disabled) {
+         background-color: #1558b0;
+      }
+
+      #startAudioButton {
+        background-color: #fbbc05;
+        color: #333;
+      }
+
+      #startAudioButton:disabled {
+         background-color: #ccc;
+         opacity: 0.7;
+         cursor: not-allowed;
+      }
+
+       #startAudioButton:hover:not(:disabled) {
+          background-color: #f0a000;
+       }
+
+      .image-gallery-container {
+        display: flex;
+        flex-wrap: wrap; /* Allows images to wrap to the next line on small screens */
+        gap: 10px; /* Adds space between images */
+        padding: 0; /* Override the default padding for p tags */
+        background-color: transparent !important; /* Make the container transparent */
+      }
+
+      /* Ensure images within the gallery don't get too big */
+      .image-gallery-container .agent-image {
+          max-width: 150px;
+          flex-grow: 1; /* Allows images to grow to fill space */
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <h1>Dreamscape Engine</h1>
+      <div id="connectionStatus" class="disconnected">Connection status: Disconnected</div>
+      <div id="messages">
+            <p class="agent-message">Hi there! You can ask me to generate an image, like "create a picture of a robot writing a book".</p>
+        </div>
+
+        <form id="messageForm">
+          <label for="message">Enter your message</label>
+          <input type="text" id="message" name="message" placeholder="Type your message here..." />
+          <button type="submit" id="sendButton" disabled>Send</button>
+          <button type="button" id="startAudioButton">Start Audio</button>
+        </form>
+    </div>
+  </body>
+</html>
