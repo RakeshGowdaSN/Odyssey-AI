@@ -6,7 +6,7 @@ set -e
 # -----------------------------------------------------------------------------
 # Configuration - Adjust these variables as needed
 # -----------------------------------------------------------------------------
-PROJECT_ID="pitchhubsmes"
+PROJECT_ID="projectname"
 REGION="us-central1"
 
 # Name for your Cloud Run service AND the image name in Artifact Registry
