@@ -1,0 +1,10 @@
+uvicorn[standard]
+google-adk
+google-genai
+python-dotenv
+fastapi[all]
+google-cloud-aiplatform
+google-cloud-storage
+Pillow
+googlemaps
+backoff
