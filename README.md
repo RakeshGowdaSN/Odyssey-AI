@@ -1,6 +1,6 @@
 # Odyssey-AI 🌍✈️
 
-Odyssey-AI is an intelligent travel assistant application designed to streamline travel planning and enhance user experiences. It leverages advanced AI models and modular agents to provide personalized recommendations, itinerary planning, and creative solutions for travelers. With Odyssey-AI, users can enjoy seamless, AI-powered travel planning via voice or text.
+Odyssey-AI is an intelligent travel assistant application designed to streamline travel planning and enhance user experiences. It leverages advanced AI models, modular agents, and rich visual tools to provide personalized recommendations, itinerary planning, image generation, and creative solutions for travelers. With Odyssey-AI, users enjoy seamless, AI-powered travel planning via voice or text—complete with real-world photos and custom-generated visuals for each suggestion.
 
 ---
 
@@ -27,12 +27,16 @@ Odyssey-AI is an intelligent travel assistant application designed to streamline
 - **Audio Processing:** Supports audio input and output using custom audio player and recorder tools.
 - **Creative Tools:** Generates creative travel ideas and solutions using advanced AI models.
 - **Google Cloud Integration:** Utilizes Google Cloud services for deployment and scalability.
+- **Proactive Visuals:** The itinerary agent automatically sends authentic photos for every suggested place, restaurant, or activity using Google Maps and Google Place Photos API.
+- **AI-Powered Image Generation:** The creative agent can generate custom images for travel ideas or user requests via Google Imagen.
+- **Automated Visual Routing:** All image and photo requests are routed to specialist agents for fast, context-aware responses.
+- **Structured, Visual-First Trip Planning:** The itinerary agent plans each day in a clear structure (Morning Activity, Lunch, Afternoon Activity, Dinner) and sends images for each, making the experience both informative and visually engaging.
 
 ---
 
 ## Layman-Friendly Explanation
 
-Odyssey-AI is an intelligent travel assistant application designed to streamline travel planning and enhance user experiences. It leverages advanced AI models and modular agents to provide personalized recommendations, itinerary planning, and creative solutions for travelers. With Odyssey-AI, users can enjoy seamless, AI-powered travel planning via voice or text.
+Odyssey-AI is your smart travel buddy. It can chat with you through text or voice, help you book flights or hotels, and create personalized travel plans. What makes it unique is that it doesn’t just suggest places—it proactively sends real images of those places and can generate custom travel visuals on demand. Every itinerary is interactive and immersive, so you see exactly where you're going and what you'll experience before you even leave home.
 
 ---
 
@@ -90,11 +94,13 @@ Odyssey-AI/
 - .env for secrets (not committed)
 - Google Cloud Run for deployment
 
+---
+
 ## Environment Variables
+
 Create a `.env` file with the following keys:
 
 ```env
-
 GOOGLE_GENAI_USE_VERTEXAI=FALSE
 GOOGLE_API_KEY='your-api-key'
 GOOGLE_PROJECT_ID='projectname'
@@ -102,12 +108,12 @@ LOCATION="us-central1"
 STAGING_BUCKET='gs://bucketname'
 GCP_BUCKET_NAME='bucketname'
 REASONING_ENGINE_NAME='projects/project_id/locations/us-central1/reasoningEngines/engine_id'
-
 ```
 
 > **Note:** Never commit .env or API keys to source control.
 
 ---
+
 ## Running Locally
 
 **1. Create & activate virtual environment:**
@@ -148,18 +154,27 @@ docker run -p 8000:8000 --env-file .env odyssey-ai
 
 ---
 
----
-
 ## Endpoints
 
-**1. `GET /`**  
-Serves the static UI (`frontend/static/index.html`)
+Odyssey-AI uses a single, unified **WebSocket endpoint** for all agent communication and audio interactions.
 
-**2. Static files**  
-Mounted at `/static` → `frontend/static/*`
+### Main Endpoints
 
-**3. API Endpoints**  
-Endpoints for interacting with agents (e.g., booking, itinerary planning) are defined in `main.py`.
+- **`GET /`**  
+  Serves the static UI (`frontend/static/index.html`).
+
+- **`/static/*`**  
+  Serves static files (HTML, JS, CSS, images) from the frontend.
+
+### Core WebSocket Endpoint
+
+- **`ws://<host>/ws/{session_id}?is_audio=true|false`**  
+  - All agent communication (greeting, booking, itinerary, creative, images, audio) occurs over this single WebSocket endpoint.
+  - `session_id` is a unique string per user session.
+  - `is_audio=true` enables audio streaming and voice interaction; otherwise, interaction is text-based.
+  - The backend routes each message to the correct agent (greeting, booking, itinerary, creative/image) and streams responses back, including text, images, and audio.
+
+**No separate REST API endpoints** are exposed for agent actions; all agent and tool interactions—including text, audio, image responses, and proactive visuals—are handled via this websocket.
 
 ---
 
@@ -168,9 +183,10 @@ Endpoints for interacting with agents (e.g., booking, itinerary planning) are de
 1. **User opens UI:** Sees a chat interface and mic button.
 2. **User types or speaks:** Chat or voice input is captured.
 3. **Browser captures audio:** AudioWorklet records raw PCM and streams it to the backend.
-4. **Backend processes input:** Routes the input to the appropriate agent for processing.
+4. **Backend processes input:** Routes the input to the appropriate agent for processing (greeting, booking, itinerary, creative).
 5. **Agent returns response:** Structured JSON and/or synthesized audio is sent back.
 6. **Frontend displays results:** Shows text, plays audio, and handles tool results.
+7. **Visual Features:** For every itinerary suggestion, the backend proactively sends real-world photos or AI-generated images, which are instantly displayed in the UI. Users can also request creative visuals or travel postcards and receive custom-generated images.
 
 ---
 
@@ -198,4 +214,3 @@ Endpoints for interacting with agents (e.g., booking, itinerary planning) are de
 ## License
 
 MIT — see [LICENSE](LICENSE).
-
