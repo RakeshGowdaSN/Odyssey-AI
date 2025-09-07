@@ -148,6 +148,8 @@ docker run -p 8000:8000 --env-file .env odyssey-ai
 
 ---
 
+---
+
 ## Endpoints
 
 **1. `GET /`**  
@@ -156,32 +158,44 @@ Serves the static UI (`frontend/static/index.html`)
 **2. Static files**  
 Mounted at `/static` → `frontend/static/*`
 
-Endpoints
-1. GET /
-Serves the static UI (frontend/static/index.html).
+**3. API Endpoints**  
+Endpoints for interacting with agents (e.g., booking, itinerary planning) are defined in `main.py`.
 
-2. API Endpoints
-Endpoints for interacting with agents (e.g., booking, itinerary planning) are defined in main.py.
+---
 
-User Journey
-User opens UI: Sees a chat interface and mic button.
-User types or speaks: Chat or voice input is captured.
-Browser captures audio: AudioWorklet records raw PCM and streams it to the backend.
-Backend processes input: Routes the input to the appropriate agent for processing.
-Agent returns response: Structured JSON and/or synthesized audio is sent back.
-Frontend displays results: Shows text, plays audio, and handles tool results.
-Security & Privacy
-Never commit .env or keys.
-Treat user data as sensitive; use TLS in production.
-Minimize logging of PII.
-Add authentication and secure storage before production use.
-Contributing
-Fork the repo, create a feature branch, and open a Pull Request.
-Run linters and tests before submitting.
-Keep changes modular:
-Agent logic in agents/
-Frontend logic in frontend/static/js/
-Update README and .env.example for new keys
-Open issues for feature requests or improvements.
-License
-MIT — see LICENSE. ``````
+## User Journey
+
+1. **User opens UI:** Sees a chat interface and mic button.
+2. **User types or speaks:** Chat or voice input is captured.
+3. **Browser captures audio:** AudioWorklet records raw PCM and streams it to the backend.
+4. **Backend processes input:** Routes the input to the appropriate agent for processing.
+5. **Agent returns response:** Structured JSON and/or synthesized audio is sent back.
+6. **Frontend displays results:** Shows text, plays audio, and handles tool results.
+
+---
+
+## Security & Privacy
+
+- Never commit `.env` or keys.
+- Treat user data as sensitive; use TLS in production.
+- Minimize logging of PII.
+- Add authentication and secure storage before production use.
+
+---
+
+## Contributing
+
+1. Fork the repo, create a feature branch, and open a Pull Request.
+2. Run linters and tests before submitting.
+3. Keep changes modular:
+   - Agent logic in `agents/`
+   - Frontend logic in `frontend/static/js/`
+4. Update README and `.env.example` for new keys.
+5. Open issues for feature requests or improvements.
+
+---
+
+## License
+
+MIT — see [LICENSE](LICENSE).
+
