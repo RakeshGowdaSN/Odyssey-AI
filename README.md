@@ -1,141 +1,187 @@
-# Odyssey-AI
+# Odyssey-AI 🌍✈️
 
-Odyssey-AI is an intelligent travel assistant application designed to streamline travel planning and enhance user experiences. It leverages advanced AI models and modular agents to provide personalized recommendations, itinerary planning, and creative solutions for travelers.
-
----
-
-## Features
-
-- **Agent-Oriented Architecture**: Modular agents for greeting, booking, itinerary planning, and creative tasks.
-- **Interactive Frontend**: A web-based interface for seamless interaction with the AI assistant.
-- **Audio Processing**: Support for audio input and output using custom audio player and recorder tools.
-- **Creative Tools**: Generate creative travel ideas and solutions using advanced AI models.
-- **Google Cloud Integration**: Utilizes Google Cloud services for deployment and scalability.
+Odyssey-AI is an intelligent travel assistant application designed to streamline travel planning and enhance user experiences. It leverages advanced AI models and modular agents to provide personalized recommendations, itinerary planning, and creative solutions for travelers. With Odyssey-AI, users can enjoy seamless, AI-powered travel planning via voice or text.
 
 ---
 
-## Code Repository Structure
+## Table of Contents
+- [Key Technical Highlights](#key-technical-highlights)
+- [Layman-Friendly Explanation](#layman-friendly-explanation)
+- [Project Structure](#project-structure)
+- [Tech Stack](#tech-stack)
+- [Environment Variables](#environment-variables)
+- [Running Locally](#running-locally)
+- [Using Docker](#using-docker)
+- [Endpoints](#endpoints)
+- [User Journey](#user-journey)
+- [Security & Privacy](#security--privacy)
+- [Contributing](#contributing)
+- [License](#license)
 
-The repository is organized as follows:
+---
+
+## Key Technical Highlights
+
+- **Agent-Oriented Architecture:** Modular agents handle specific tasks such as greeting, booking, itinerary planning, and creative solutions.
+- **Interactive Frontend:** A web-based interface allows users to interact seamlessly with the AI assistant.
+- **Audio Processing:** Supports audio input and output using custom audio player and recorder tools.
+- **Creative Tools:** Generates creative travel ideas and solutions using advanced AI models.
+- **Google Cloud Integration:** Utilizes Google Cloud services for deployment and scalability.
+
+---
+
+## Layman-Friendly Explanation
+
+Odyssey-AI is an intelligent travel assistant application designed to streamline travel planning and enhance user experiences. It leverages advanced AI models and modular agents to provide personalized recommendations, itinerary planning, and creative solutions for travelers. With Odyssey-AI, users can enjoy seamless, AI-powered travel planning via voice or text.
+
+---
+
+## Project Structure
 
 ```text
-Odyssey-AI/ 
-├── agents/ # Specialized agents for handling specific tasks 
-│ ├── agent.py # Root agent orchestrating sub-agents 
-│ ├── booking_agent.py # Handles booking-related tasks 
-│ ├── creative_agent.py # Provides creative travel solutions 
-│ ├── greeting_agent.py # Manages user greetings and onboarding 
-│ ├── itinerary_agent.py # Plans travel itineraries 
-├── frontend/ # Web-based user interface 
-│ ├── static/ # Static assets for the frontend 
-│ │ ├── index.html # Main HTML file 
-│ │ └── js/ # JavaScript files for frontend functionality 
-│ │ ├── app.js # Main frontend logic 
-│ │ ├── audio-player.js # Audio playback functionality 
-│ │ ├── audio-recorder.js # Audio recording functionality 
-│ │ ├── pcm-player-processor.js # PCM audio player processor 
-│ │ └── pcm-recorder-processor.js # PCM audio recorder processor 
-├── tools/ # Utility tools for backend processing 
-│ ├── agent_wrappers.py # Wrappers for agent interactions 
-│ ├── creative_backend_tools.py # Tools for creative content generation 
-│ ├── place_photo_tools.py # Tools for handling place photos 
-│ └── planning_tools.py # Tools for travel planning 
-├── .env # Environment variables (not included in the repo) 
-├── .gcloudignore # Files to ignore during Google Cloud deployment 
-├── .gitignore # Files to ignore in Git 
-├── deploy.sh # Deployment script 
-├── Dockerfile # Docker configuration for containerization 
-├── LICENSE # License file (MIT License) 
-├── main.py # Main application entry point 
-├── README.md # Project documentation 
-├── requirements.txt # Python dependencies
-```text
+Odyssey-AI/
+├── main.py                  # Application entry point
+├── requirements.txt         # Python dependencies
+├── Dockerfile               # Containerization instructions
+├── deploy.sh                # Deployment helper for Cloud Run
+├── .env                     # Environment variables (not committed)
+├── agents/                  # Core AI logic
+│   ├── agent.py
+│   ├── booking_agent.py
+│   ├── creative_agent.py
+│   ├── greeting_agent.py
+│   └── itinerary_agent.py
+├── frontend/
+│   └── static/
+│       ├── index.html
+│       ├── js/
+│       │   ├── app.js
+│       │   ├── audio-player.js
+│       │   ├── audio-recorder.js
+│       │   ├── pcm-player-processor.js
+│       │   └── pcm-recorder-processor.js
+│       └── styles/
+│           └── style.css
+├── tools/                   # Utility tools for backend processing
+│   ├── agent_wrappers.py
+│   ├── creative_backend_tools.py
+│   ├── place_photo_tools.py
+│   └── planning_tools.py
+├── README.md
+└── LICENSE
+```
 
 ---
 
-## Setup
+## Tech Stack
 
-### Prerequisites
+**Backend**
+- Python 3.8+
+- FastAPI (for API handling)
+- Google Cloud SDK (for deployment and scalability)
 
-- Python 3.8 or higher
-- Google Cloud SDK installed
-- Docker (optional, for containerized deployment)
+**Frontend**
+- HTML5, CSS3, Vanilla JS (ES6+)
+- Web Audio API + AudioWorklet
+- Streams PCM as base64-encoded JSON over WebSocket
 
-### Installation
+**DevOps**
+- Docker & deploy.sh
+- .env for secrets (not committed)
+- Google Cloud Run for deployment
 
-1. Clone the repository:
+## Environment Variables
+Create a `.env` file with the following keys:
 
-    ```bash
-    git clone https://github.com/yourusername/Odyssey-AI.git
-    cd Odyssey-AI
-    ```
+```env
 
-2. Create a virtual environment and activate it:
+GOOGLE_GENAI_USE_VERTEXAI=FALSE
+GOOGLE_API_KEY='your-api-key'
+GOOGLE_PROJECT_ID='projectname'
+LOCATION="us-central1"
+STAGING_BUCKET='gs://bucketname'
+GCP_BUCKET_NAME='bucketname'
+REASONING_ENGINE_NAME='projects/project_id/locations/us-central1/reasoningEngines/engine_id'
 
-    ```bash
-    python -m venv venv
-    source venv/bin/activate  # On Windows, use `venv\Scripts\activate`
-    ```
+```
 
-3. Install the required dependencies:
+> **Note:** Never commit .env or API keys to source control.
 
-    ```bash
-    pip install -r requirements.txt
-    ```
+---
+## Running Locally
 
-4. Set up environment variables:
+**1. Create & activate virtual environment:**
+```sh
+python -m venv venv
+venv\Scripts\activate  # On Windows
+# Or on Unix/Mac: source venv/bin/activate
+```
 
-    Create a `.env` file in the root directory and add the following variables:
+**2. Install dependencies:**
+```sh
+pip install -r requirements.txt
+```
 
-    ```plaintext
-    GOOGLE_PROJECT_ID=your-google-project-id
-    GOOGLE_API_KEY=your-google-api-key
-    ```
+**3. Add your Google credentials to `.env`.**
+
+**4. Start the server:**
+```sh
+uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+```
+
+**5. Open the UI in your browser:**  
+[http://localhost:8000/](http://localhost:8000/)
 
 ---
 
-## Usage
+## Using Docker
 
-### Running the Application Locally
+**Build the image:**
+```sh
+docker build -t odyssey-ai .
+```
 
-1. Start the backend server:
-
-    ```bash
-    python main.py
-    ```
-
-2. Open the `index.html` file in the `frontend/static/` directory to access the web interface.
-
----
-
-## Deployment
-
-### Deploying to Google Cloud Run
-
-1. Build and push the Docker image:
-
-    ```bash
-    gcloud builds submit --tag gcr.io/your-google-project-id/odyssey-ai
-    ```
-
-2. Deploy the application:
-
-    ```bash
-    gcloud run deploy odyssey-ai \
-      --image gcr.io/your-google-project-id/odyssey-ai \
-      --platform managed \
-      --region us-central1 \
-      --allow-unauthenticated
-    ```
+**Run the container:**
+```sh
+docker run -p 8000:8000 --env-file .env odyssey-ai
+```
 
 ---
 
-## Contributing
+## Endpoints
 
-Contributions are welcome! Please open an issue or submit a pull request for any improvements or bug fixes.
+**1. `GET /`**  
+Serves the static UI (`frontend/static/index.html`)
 
----
+**2. Static files**  
+Mounted at `/static` → `frontend/static/*`
 
-## License
+Endpoints
+1. GET /
+Serves the static UI (frontend/static/index.html).
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+2. API Endpoints
+Endpoints for interacting with agents (e.g., booking, itinerary planning) are defined in main.py.
+
+User Journey
+User opens UI: Sees a chat interface and mic button.
+User types or speaks: Chat or voice input is captured.
+Browser captures audio: AudioWorklet records raw PCM and streams it to the backend.
+Backend processes input: Routes the input to the appropriate agent for processing.
+Agent returns response: Structured JSON and/or synthesized audio is sent back.
+Frontend displays results: Shows text, plays audio, and handles tool results.
+Security & Privacy
+Never commit .env or keys.
+Treat user data as sensitive; use TLS in production.
+Minimize logging of PII.
+Add authentication and secure storage before production use.
+Contributing
+Fork the repo, create a feature branch, and open a Pull Request.
+Run linters and tests before submitting.
+Keep changes modular:
+Agent logic in agents/
+Frontend logic in frontend/static/js/
+Update README and .env.example for new keys
+Open issues for feature requests or improvements.
+License
+MIT — see LICENSE. ``````
